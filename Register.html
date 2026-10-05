@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/logo-sporthub.png">
+    <title>Đăng Ký</title>
+</head>
+<body class="LoginAndRegister-body">
+
+    <div class="LoginAndRegister-card">
+        <h2>Đăng Ký</h2>
+        <div class="underline-decor"></div>
+        
+        <form id="register-form">
+            <div class="input-group">
+                <input type="text" id="register-username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="email" id="register-email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="register-password" placeholder="Mật khẩu" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required>
+            </div>
+            
+            <button type="submit" class="btn-login">Đăng Ký</button>
+        </form>
+
+        <script>
+            const API_BASE = window.location.origin + '/Sporhub/api/public/api';
+            
+            document.getElementById('register-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('register-username').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    alert('Mật khẩu và Nhập lại mật khẩu không khớp!');
+                    return;
+                }
+
+                const payload = {
+                    username: username,
+                    email: email,
+                    password: password
+                };
+
+                try {
+                    const response = await fetch(API_BASE + '/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert('Đăng ký thành công! Đang chuyển hướng đến trang Đăng nhập...');
+                        window.location.href = 'taikhoan.html';
+                    } else {
+                        alert('Đăng ký thất bại: ' + (data.message || 'Lỗi hệ thống'));
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Lỗi kết nối đến server!');
+                }
+            });
+        </script>
+
+        <div class="Other-Login">
+            <p class="Log_through">Hoặc đăng ký qua</p>
+            <div class="AL_Button">
+                <button>
+                    <img src="assets/images/Google-logo.png" alt="Google"> Google
+                </button>
+                <button>
+                    <img src="assets/images/facebook.png" alt="Facebook"> Facebook
+                </button>
+            </div>
+        </div>
+
+        <div class="TrangChu_DangKi_DangNhap" style="justify-content: center;">
+            <span class="register-text">Đã có tài khoản? <a href="taikhoan.html" class="register-link">Đăng nhập</a></span>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# Nếu request bắt đầu bằng /api/ thì chuyển tới api/public/index.php
+RewriteCond %{REQUEST_URI} ^/api/ [NC]
+RewriteRule ^api/(.*)$ api/public/index.php?url=$1 [QSA,L]

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/logo-sporthub.png">
+    <title>Đăng Nhập</title>
+</head>
+
+<body class="LoginAndRegister-body">
+
+    <div class="LoginAndRegister-card">
+        <h2>Đăng Nhập</h2>
+        <div class="underline-decor"></div>
+
+        <form id="login-form">
+            <div class="input-group">
+                <input type="text" id="login-username" placeholder="username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="login-password" placeholder="Mật khẩu" required>
+            </div>
+            <div class="Luu_QuenMK">
+                <label>
+                    <input type="checkbox" id="remember-pass" value="Remember_Pass"> Ghi nhớ đăng nhập?
+                </label>
+                <a href="#" class="Forgot_Pass">Quên mật khẩu?</a>
+            </div>
+            <button type="submit" class="btn-login">Đăng Nhập</button>
+        </form>
+
+        <script>
+            const API_BASE = window.location.origin + '/Sporhub/api/public/api';
+
+            document.getElementById('login-form').addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+
+                const payload = {
+                    username: username,
+                    password: password
+                };
+
+                try {
+                    const response = await fetch(API_BASE + '/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        localStorage.setItem('user', JSON.stringify(data.data));
+
+                        if (data.data.role === 'ADMIN') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'index.html';
+                        }
+                    } else {
+                        alert('Đăng nhập thất bại: ' + (data.message || 'Sai tên đăng nhập hoặc mật khẩu'));
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Lỗi kết nối đến server!');
+                }
+            });
+        </script>
+
+        <div class="Other-Login">
+            <p class="Log_through">Hoặc đăng nhập qua</p>
+            <div class="AL_Button">
+                <button>
+                    <img src="assets/images/Google-logo.png" alt="Google"> Google
+                </button>
+                <button>
+                    <img src="assets/images/facebook.png" alt="Facebook"> Facebook
+                </button>
+            </div>
+        </div>
+
+        <div class="TrangChu_DangKi_DangNhap" style="justify-content: center;">
+            <span class="register-text">Chưa có Tài khoản? <a href="Register.html" class="register-link">Đăng kí
+                    ngay</a></span>
+        </div>
+    </div>
+
+</body>
+
+</html>

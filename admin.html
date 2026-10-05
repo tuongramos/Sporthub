@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/logo-sporthub.png">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/images/logo-sporthub.png" alt="Sporthub Logo" class="admin-logo">
+                <h2>Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="dashboard-tab">Tổng quan</a>
+                <a href="#" class="nav-item" data-tab="users-tab">Quản lý Tài khoản</a>
+                <a href="#" class="nav-item" data-tab="products-tab">Quản lý Sản phẩm</a>
+                <a href="#" class="nav-item" data-tab="promotions-tab">Quản lý Khuyến mãi</a>
+                <a href="#" class="nav-item text-danger" id="logout-btn" style="display: flex; align-items: center;">
+                    <img src="assets/images/log-out.png" alt="icon" id="logout-icon" style="width: 20px; height: 20px; margin-right: 8px; object-fit: contain;"> Đăng xuất
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="admin-sidebar-toggle" class="sidebar-toggle-btn" aria-label="Mở menu">
+                        <img src="assets/images/menu.png" alt="Menu" style="width: 22px; height: 22px; object-fit: contain;">
+                    </button>
+                    <div class="topbar-brand-mobile">
+                        <img src="assets/images/logo-sporthub.png" alt="Logo" style="width: 30px; height: 30px; object-fit: contain;">
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <div class="topbar-search">
+                    <img src="assets/images/search-black.png" alt="icon">
+                    <input type="text" placeholder="Tìm kiếm..." id="admin-search-input">
+                </div>
+                <div class="topbar-user">
+                    <span class="admin-name" id="admin-name-display">Admin</span>
+                    <img src="assets/images/user.png" alt="Admin" class="avatar">
+                </div>
+            </header>
+
+            <!-- Dashboard Tab -->
+            <section id="dashboard-tab" class="tab-content active">
+                <h1 class="page-title">Tổng quan</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><img src="assets/images/users-round.png" alt="icon"></div>
+                        <div class="stat-info">
+                            <h3>Tổng người dùng</h3>
+                            <p id="total-users">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><img src="assets/images/package-2.png" alt="icon"></div>
+                        <div class="stat-info">
+                            <h3>Tổng sản phẩm</h3>
+                            <p id="total-products">0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Tab -->
+            <section id="users-tab" class="tab-content">
+                <div class="page-header">
+                    <h1 class="page-title">Quản lý Tài khoản</h1>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Vai trò</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Products Tab (Nested views) -->
+            <section id="products-tab" class="tab-content">
+                <div id="view-categories">
+                    <div class="page-header">
+                        <h1 class="page-title">Quản lý Danh mục Sản phẩm</h1>
+                        <button class="btn btn-primary" id="btn-add-category">
+                            <img src="assets/images/plus.png" alt="icon"> Thêm Danh mục
+                        </button>
+                    </div>
+                    <!-- Lưới danh mục sẽ được JS tạo ra ở đây -->
+                    <div class="category-grid" id="category-grid">
+                    </div>
+                </div>
+
+                <!-- View 2: Danh sách Sản phẩm (ẩn mặc định) -->
+                <div id="view-products" style="display: none;">
+                    <div class="page-header">
+                        <div>
+                            <button class="btn btn-secondary btn-sm" id="btn-back-categories" style="margin-bottom: 10px;">Quay lại</button>
+                            <h1 class="page-title" id="current-category-title">Danh sách Sản phẩm</h1>
+                        </div>
+                        <button class="btn btn-primary" id="btn-add-product">
+                            <img src="assets/images/plus.png" alt="icon"> Thêm Sản Phẩm
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table" id="products-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Danh mục</th>
+                                    <th>Trạng thái</th>
+                                    <th>Biến thể</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Promotions Tab -->
+            <section id="promotions-tab" class="tab-content">
+                <div class="page-header">
+                    <h1 class="page-title">Quản lý Khuyến mãi</h1>
+                    <button class="btn btn-primary" id="btn-add-promotion">
+                        <img src="assets/images/plus.png" alt="icon"> Thêm Khuyến Mãi
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table" id="promotions-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Mã CODE</th>
+                                <th>Giảm %</th>
+                                <th>Giảm tiền</th>
+                                <th>Đơn tối thiểu</th>
+                                <th>Bắt đầu</th>
+                                <th>Kết thúc</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="product-modal-title">Thêm Sản Phẩm</h2>
+                <button class="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <input type="hidden" id="product-id">
+                    <div class="form-group">
+                        <label>Tên sản phẩm</label>
+                        <input type="text" id="product-name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Giá (VNĐ)</label>
+                            <input type="number" id="product-price" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category ID</label>
+                            <input type="number" id="product-category" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>URL Hình ảnh (hoặc Tên file trong assets/images)</label>
+                        <input type="text" id="product-image" required placeholder="Ví dụ: assets/images/vot1.png">
+                        <input type="file" id="product-image-file" accept="image/*" style="margin-top: 10px;">
+                        <div id="product-image-preview" style="display: none;"></div>
+                        <div id="upload-status" style="display: none;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Thư viện ảnh (Gallery)</label>
+                        <input type="hidden" id="product-gallery">
+                        <input type="file" id="product-gallery-file" multiple accept="image/*">
+                        <div id="gallery-preview" style="display: flex; gap: 10px; margin-top: 10px;"></div>
+                        <div id="gallery-upload-status" style="display: none; color: #666; font-size: 12px; margin-top: 5px;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select id="product-status" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mô tả chi tiết</label>
+                        <textarea id="product-desc" rows="4"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Hủy</button>
+                <button class="btn btn-primary" id="btn-save-product">Lưu Sản Phẩm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Role Modal -->
+    <div class="modal" id="user-modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>Đổi Quyền Tài Khoản</h2>
+                <button class="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="user-form">
+                    <input type="hidden" id="user-edit-id">
+                    <div class="form-group">
+                        <label>Vai trò mới</label>
+                        <select id="user-role-select">
+                            <option value="USER">Người dùng (USER)</option>
+                            <option value="ADMIN">Quản trị viên (ADMIN)</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Hủy</button>
+                <button class="btn btn-primary" id="btn-save-user-role">Lưu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal" id="confirm-modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>Xác nhận</h2>
+                <button class="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Bạn có chắc chắn muốn thực hiện hành động này?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Hủy</button>
+                <button class="btn btn-danger" id="btn-confirm-action">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    <!-- Category Modal -->
+    <div class="modal" id="category-modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2 id="category-modal-title">Thêm Danh Mục</h2>
+                <button class="close-modal"><img src="assets/images/plus.png" alt="icon"></button>
+            </div>
+            <div class="modal-body">
+                <form id="category-form">
+                    <input type="hidden" id="category-id">
+                    <div class="form-group">
+                        <label>Tên danh mục</label>
+                        <input type="text" id="category-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>URL Hình ảnh/Icon</label>
+                        <input type="text" id="category-image" required placeholder="Ví dụ: assets/images/icon1.png">
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select id="category-status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả</label>
+                        <textarea id="category-desc" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Hủy</button>
+                <button class="btn btn-primary" id="btn-save-category">Lưu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variant Modal -->
+    <div class="modal" id="variant-modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 id="variant-modal-title">Quản lý Biến thể</h2>
+                <button class="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add Variant Form -->
+                <div class="add-variant-section" style="background: var(--bg-body); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4>Thêm/Sửa Biến thể mới</h4>
+                    <form id="variant-form" style="display: flex; gap: 10px; align-items: flex-end; margin-top: 10px;">
+                        <input type="hidden" id="variant-id">
+                        <div class="form-group" style="flex: 1; margin: 0;">
+                            <label>Kích thước (Size)</label>
+                            <input type="text" id="variant-size" required placeholder="Ví dụ: 42, XL">
+                        </div>
+                        <div class="form-group" style="flex: 1; margin: 0;">
+                            <label>Màu sắc</label>
+                            <input type="text" id="variant-color" required placeholder="Ví dụ: Đỏ đen">
+                        </div>
+                        <div class="form-group" style="flex: 1; margin: 0;">
+                            <label>Số lượng kho</label>
+                            <input type="number" id="variant-stock" required min="0" value="0">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btn-save-variant" style="height: 42px;">Lưu</button>
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-variant" style="height: 42px; display:none;">Hủy</button>
+                    </form>
+                </div>
+
+                <!-- Variant List -->
+                <div class="table-container">
+                    <table class="admin-table" id="variants-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Kích thước</th>
+                                <th>Màu sắc</th>
+                                <th>Tồn kho</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promotion Modal -->
+    <div class="modal" id="promotion-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="promotion-modal-title">Thêm Khuyến Mãi</h2>
+                <button class="close-modal"><img src="assets/images/plus.png" alt="icon"></button>
+            </div>
+            <div class="modal-body">
+                <form id="promotion-form">
+                    <input type="hidden" id="promotion-id">
+                    <div class="form-group">
+                        <label>Mã Khuyến Mãi</label>
+                        <input type="text" id="promotion-code" required placeholder="Ví dụ: SUMMER2024">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Giảm giá (%)</label>
+                            <input type="number" id="promotion-discount-percent" step="0.01" min="0" max="100" placeholder="0 - 100">
+                        </div>
+                        <div class="form-group">
+                            <label>Giảm giá (VNĐ)</label>
+                            <input type="number" id="promotion-discount-amount" min="0" placeholder="Số tiền giảm">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Giá trị đơn hàng tối thiểu (VNĐ)</label>
+                        <input type="number" id="promotion-min-order" min="0" required placeholder="0 nếu không yêu cầu">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ngày bắt đầu</label>
+                            <input type="datetime-local" id="promotion-start" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày kết thúc</label>
+                            <input type="datetime-local" id="promotion-end" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select id="promotion-status" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Hủy</button>
+                <button class="btn btn-primary" id="btn-save-promotion">Lưu Khuyến Mãi</button>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/admin.js?v=3"></script>
+</body>
+</html>

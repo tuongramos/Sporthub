@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css?v=1.1">
+    <link rel="icon" type="image/x-icon" href="assets/images/logo-sporthub.png">
+    <title>Thanh Toán</title>
+</head>
+<body class="checkout-page">
+
+    <div class="checkout-container">
+        <div class="checkout-left">
+            <h1 class="checkout-logo">Sporthub</h1>
+            
+            <div class="checkout-breadcrumbs">
+                <a href="giohang.html">Giỏ hàng</a> > 
+                <span id="bc-step1" class="active">Thông tin giao hàng</span>
+                <span id="bc-step2">Phương thức thanh toán</span>
+            </div>
+
+            <div id="checkout-step-1" class="checkout-step">
+                <h2>Thông tin giao hàng</h2>
+                <form id="delivery-form">
+                    <div class="form-group">
+                        <input type="text" id="fullname" placeholder="Họ và tên" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <input type="email" id="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group half">
+                            <input type="tel" id="phone" placeholder="Số điện thoại" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="address" placeholder="Địa chỉ" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <select id="province" required>
+                                <option value="">Tỉnh / Thành phố</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <select id="ward" required disabled>
+                                <option value="">Xã / Phường</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="checkout-actions">
+                        <a href="giohang.html" class="back-link">Giỏ hàng</a>
+                        <button type="button" class="btn-checkout-step" id="btn-to-step2">Tiếp tục đến phương thức thanh toán</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="checkout-step-2" class="checkout-step" style="display: none;">
+                <div class="shipping-method-box">
+                    <h2>Phương thức vận chuyển</h2>
+                    <div class="radio-box">
+                        <label>
+                            <input type="radio" checked>
+                            <span class="radio-label">Giao hàng tận nơi</span>
+                            <span class="shipping-fee">35,000₫</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="payment-method-box">
+                    <h2>Phương thức thanh toán</h2>
+                    <div class="radio-group">
+                        <div class="radio-box">
+                            <label>
+                                <input type="radio" name="payment_method" value="cod" checked>
+                                <img src="assets/images/banknote-arrow-up.png" alt="Icon" class="payment-icon">
+                                <span class="radio-label">Thanh toán khi giao hàng (COD)</span>
+                            </label>
+                        </div>
+                        <div class="radio-box">
+                            <label>
+                                <input type="radio" name="payment_method" value="bank">
+                                <img src="assets/images/landmark.png" alt="Icon" class="payment-icon">
+                                <span class="radio-label">Chuyển khoản qua ngân hàng</span>
+                            </label>
+                            <div class="bank-details" id="bank-info" style="display: none;">
+                                <p>CHUYỂN KHOẢN ĐẾN STK MB Bank 0822262802222 Nguyễn Mạnh Tường</p>
+                                <p>NỘI DUNG: TÊN NGƯỜI MUA - SĐT - SẢN PHẨM MUA</p>
+                                <p>VÍ DỤ: Tường - 0382160000 - áo real retro</p>
+                                <p>SAU KHI CHUYỂN KHOẢN KHÁCH VUI LÒNG GỬI ẢNH BILL CHO SHOP QUA MESS</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <button type="button" class="back-link btn-back-step1" id="btn-back-step1">Quay lại</button>
+                    <button type="button" class="btn-checkout-step" id="btn-complete-order">Hoàn tất đơn hàng</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="checkout-right">
+            <div class="order-summary">
+                <div class="summary-items" id="checkout-summary-items">
+                    <!-- Rendered by JS -->
+                </div>
+
+                <div class="discount-code" id="discount-section">
+                    <input type="text" id="discount-input" placeholder="Mã giảm giá">
+                    <button type="button" id="btn-apply-discount">Sử dụng</button>
+                </div>
+
+                <div class="summary-totals">
+                    <div class="total-row">
+                        <span>Tạm tính</span>
+                        <span id="subtotal">0₫</span>
+                    </div>
+                    <div class="total-row" id="discount-row" style="display: none;">
+                        <span>Giảm giá</span>
+                        <span id="discount-amount">0₫</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Phí vận chuyển</span>
+                        <span id="shipping-cost">—</span>
+                    </div>
+                </div>
+
+                <div class="summary-final">
+                    <span>Tổng cộng</span>
+                    <span class="final-price"><small>VND</small> <strong id="total-price">0₫</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-modal" id="success-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-icon"><img src="assets/images/pay-success.png" alt="Thành công" class="ui-icon-modal"></div>
+            <h2>Thanh toán thành công</h2>
+            <p>Cảm ơn quý khách đã mua hàng.</p>
+            <a href="index.html" class="btn-checkout-step">Về trang chủ</a>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var dataStr = sessionStorage.getItem('checkoutData');
+        if (dataStr) {
+            try {
+                var data = JSON.parse(dataStr);
+                var hasInvalidPrice = !data.items || data.items.length === 0 ||
+                    data.items.some(function(item) { return !item.price || item.price <= 0; });
+                if (hasInvalidPrice) {
+                    sessionStorage.removeItem('checkoutData');
+                    console.log('[Checkout] Đã tự động xóa dữ liệu sessionStorage cũ không hợp lệ (price=0).');
+                }
+            } catch(e) {
+                sessionStorage.removeItem('checkoutData');
+            }
+        }
+    })();
+    </script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
